@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>历史记录导出</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>历史记录导出</h1>
+    <div class="time-range">
+      <label>时间范围：</label>
+      <select id="timeRange">
+        <option value="today">今天</option>
+        <option value="3days">三天内</option>
+        <option value="week">一周内</option>
+        <option value="month">一月内</option>
+        <option value="custom">自定义</option>
+      </select>
+    </div>
+    
+    <div id="customRange" class="hidden">
+      <label>开始日期：</label>
+      <input type="date" id="startDate">
+      <label>结束日期：</label>
+      <input type="date" id="endDate">
+    </div>
+    
+    <button id="exportBtn">导出为Markdown</button>
+    <textarea id="output" readonly></textarea>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
