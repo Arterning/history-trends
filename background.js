@@ -34,7 +34,8 @@ chrome.history.onVisited.addListener(async (historyItem) => {
       title: historyItem.title || historyItem.url,
       firstVisitTime: now.getTime(),
       lastVisitTime: now.getTime(),
-      visitCount: 1
+      visitCount: 1,
+      memos: []  // 新增备忘录数组
     });
   }
   
