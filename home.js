@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const customRangeBtn = document.getElementById('custom-range-btn');
     const groupedSearchInput = document.getElementById('grouped-search-input');
     const groupedSearchButton = document.getElementById('grouped-search-button');
+    const sortOrder = document.getElementById('sort-order');
   
     let groupedHistoryData = {};
   
@@ -64,9 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const fragment = document.createDocumentFragment();
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
   
-      const filteredDomains = Object.keys(groupedHistoryData)
-        .filter(domain => domain.toLowerCase().includes(lowerCaseSearchTerm))
-        .sort();
+      let filteredDomains = Object.keys(groupedHistoryData)
+        .filter(domain => domain.toLowerCase().includes(lowerCaseSearchTerm));
+
+      const sortValue = sortOrder.value;
+      if (sortValue === 'visits') {
+        filteredDomains.sort((a, b) => groupedHistoryData[b].length - groupedHistoryData[a].length);
+      } else if (sortValue === 'time') {
+        filteredDomains.sort((a, b) => {
+          const lastVisitA = groupedHistoryData[a][0].lastVisitTime;
+          const lastVisitB = groupedHistoryData[b][0].lastVisitTime;
+          return lastVisitB - lastVisitA;
+        });
+      }
   
       filteredDomains.forEach(domain => {
         const pages = groupedHistoryData[domain];
@@ -133,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
         performGroupedSearch();
       }
     });
+
+    sortOrder.addEventListener('change', () => renderGroupedHistory(groupedSearchInput.value));
 
   // Initial load for today
   fetchAndGroupHistory(getStartOf('today'));
