@@ -1,0 +1,25 @@
+{
+  "name": "AI History Trends",
+  "version": "1.0",
+  "description": "Analyzes browsing history and visualizes trends.",
+  "manifest_version": 3,
+  "permissions": [
+    "history"
+  ],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "AI History Trends"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
