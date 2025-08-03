@@ -101,6 +101,21 @@
     .bookmark-icon {
       font-size: 12px;
     }
+    
+    .bookmark-filter-container {
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    
+    .bookmark-filter-container label {
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    
+    .bookmark-filter-btn {
+      padding: 4px 8px;
+      font-size: 10px;
+    }
   </style>
 </head>
 <body>
@@ -135,6 +150,14 @@
           <input type="date" id="start-date">
           <input type="date" id="end-date">
           <button id="custom-range-btn">View</button>
+        </div>
+        
+        <div class="bookmark-filter-container">
+          <label>Filter by Bookmark Folder:</label>
+          <div class="bookmark-filter-buttons">
+            <button id="all-bookmarks-btn" class="bookmark-filter-btn active">All Pages</button>
+            <!-- Bookmark folder buttons will be dynamically added here -->
+          </div>
         </div>
         <ul id="grouped-history-list"></ul>
       </section>

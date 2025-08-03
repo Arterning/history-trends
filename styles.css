@@ -242,6 +242,57 @@ h1 {
   font-size: 14px;
 }
 
+/* Bookmark Filter Styles */
+.bookmark-filter-container {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.bookmark-filter-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 14px;
+}
+
+.bookmark-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bookmark-filter-btn {
+  padding: 6px 12px;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  color: #495057;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.bookmark-filter-btn:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.bookmark-filter-btn.active {
+  background-color: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+}
+
+.bookmark-filter-btn.active:hover {
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+}
+
 #grouped-history-list {
   list-style-type: none;
   padding: 0;
@@ -326,7 +377,7 @@ h1 {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  background-color: #e9ecef;
+  /* background-color: #e9ecef; */
   padding: 10px;
   border-radius: 6px;
 }

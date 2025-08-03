@@ -12,8 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const groupedSearchInput = document.getElementById('grouped-search-input');
     const groupedSearchButton = document.getElementById('grouped-search-button');
     const sortOrder = document.getElementById('sort-order');
+    const allBookmarksBtn = document.getElementById('all-bookmarks-btn');
+    const bookmarkFilterButtons = document.querySelector('.bookmark-filter-buttons');
   
     let groupedHistoryData = {};
+    let currentBookmarkFilter = 'all';
+    let allBookmarkFolders = [];
   
     // Bookmark functions using message passing to background script
     async function getBookmarksForUrl(url) {
@@ -191,6 +195,53 @@ document.addEventListener('DOMContentLoaded', () => {
       return addBtn;
     }
 
+    async function loadBookmarkFolders() {
+      try {
+        allBookmarkFolders = await getBookmarkFolders();
+        createBookmarkFilterButtons();
+      } catch (error) {
+        console.error('Error loading bookmark folders:', error);
+      }
+    }
+
+    function createBookmarkFilterButtons() {
+      // Clear existing buttons except "All Pages"
+      const existingButtons = bookmarkFilterButtons.querySelectorAll('.bookmark-filter-btn:not(#all-bookmarks-btn)');
+      existingButtons.forEach(btn => btn.remove());
+      
+      // Add buttons for each bookmark folder
+      allBookmarkFolders.forEach(folder => {
+        const button = document.createElement('button');
+        button.className = 'bookmark-filter-btn';
+        button.textContent = folder.title;
+        button.dataset.folderId = folder.id;
+        
+        button.addEventListener('click', () => {
+          setBookmarkFilter(folder.id);
+        });
+        
+        bookmarkFilterButtons.appendChild(button);
+      });
+    }
+
+    function setBookmarkFilter(folderId) {
+      // Update active state
+      document.querySelectorAll('.bookmark-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      const activeButton = folderId === 'all' 
+        ? allBookmarksBtn 
+        : bookmarkFilterButtons.querySelector(`[data-folder-id="${folderId}"]`);
+      
+      if (activeButton) {
+        activeButton.classList.add('active');
+      }
+      
+      currentBookmarkFilter = folderId;
+      renderGroupedHistory(groupedSearchInput.value);
+    }
+
     async function showBookmarkFolderDialog(url, title, container) {
       // Create modal dialog
       const modal = document.createElement('div');
@@ -329,6 +380,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
       let filteredDomains = Object.keys(groupedHistoryData)
         .filter(domain => domain.toLowerCase().includes(lowerCaseSearchTerm));
+      
+      // Filter by bookmark folder if needed
+      if (currentBookmarkFilter !== 'all') {
+        filteredDomains = await filterDomainsByBookmarkFolder(filteredDomains, currentBookmarkFilter);
+      }
 
       const sortValue = sortOrder.value;
       if (sortValue === 'visits') {
@@ -418,6 +474,31 @@ document.addEventListener('DOMContentLoaded', () => {
       domainElements.forEach(domainLi => fragment.appendChild(domainLi));
       groupedHistoryList.appendChild(fragment);
     }
+
+    async function filterDomainsByBookmarkFolder(domains, folderId) {
+      const filteredDomains = [];
+      
+      for (const domain of domains) {
+        const pages = groupedHistoryData[domain];
+        let hasBookmarksInFolder = false;
+        
+        for (const page of pages) {
+          const bookmarks = await getBookmarksForUrl(page.url);
+          const hasBookmarkInFolder = bookmarks.some(bookmark => bookmark.parentId === folderId);
+          
+          if (hasBookmarkInFolder) {
+            hasBookmarksInFolder = true;
+            break;
+          }
+        }
+        
+        if (hasBookmarksInFolder) {
+          filteredDomains.push(domain);
+        }
+      }
+      
+      return filteredDomains;
+    }
   
     todayBtn.addEventListener('click', () => fetchAndGroupHistory(getStartOf('today')));
     weekBtn.addEventListener('click', () => fetchAndGroupHistory(getStartOf('week')));
@@ -447,8 +528,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sortOrder.addEventListener('change', async () => await renderGroupedHistory(groupedSearchInput.value));
 
+    // Bookmark filter event listeners
+    allBookmarksBtn.addEventListener('click', () => setBookmarkFilter('all'));
+
   // Initial load for today
   fetchAndGroupHistory(getStartOf('today'));
+  loadBookmarkFolders();
 });
 
 
