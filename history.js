@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let allHistoryItems = [];
   let filteredHistoryItems = [];
   let currentPage = 1;
-  const pageSize = 500;
+  const pageSize = 50;
 
   chrome.history.search({ text: '', maxResults: 0, startTime: 0 }, (historyItems) => {
     if (!historyItems || historyItems.length === 0) {
@@ -79,6 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
   prevPageButton.addEventListener('click', () => {
     if (currentPage > 1) {
       currentPage--;
+      renderFullHistory();
+      updatePagination();
+    }
+  });
+
+  nextPageButton.addEventListener('click', () => {
+    const totalPages = Math.ceil(filteredHistoryItems.length / pageSize);
+    if (currentPage < totalPages) {
+      currentPage++;
       renderFullHistory();
       updatePagination();
     }

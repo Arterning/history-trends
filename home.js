@@ -219,8 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
           setBookmarkFilter(folder.id);
         });
-        
-        bookmarkFilterButtons.appendChild(button);
+        if (folder.title !== '') {
+          bookmarkFilterButtons.appendChild(button);
+        }
       });
     }
 
