@@ -150,22 +150,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadTagsForUrl(url, container) {
         container.innerHTML = '';
-        chrome.bookmarks.search({ url: url }, (bookmarks) => {
-            bookmarks.forEach(bookmark => {
-                if (bookmark.parentId) {
-                    chrome.bookmarks.get(bookmark.parentId, (results) => {
-                        if (results && results.length > 0) {
-                            const parentFolder = results[0];
-                            // Avoid showing tags for default bookmark folders
-                            if (parentFolder.title !== 'Bookmarks bar' && parentFolder.title !== 'Other bookmarks' && parentFolder.title !== 'Mobile bookmarks' && parentFolder.title !== '') {
-                                const tag = createTagBadge(parentFolder.title);
-                                container.appendChild(tag);
+        if (chrome.bookmarks) {
+            chrome.bookmarks.search({ url: url }, (bookmarks) => {
+                bookmarks.forEach(bookmark => {
+                    if (bookmark.parentId) {
+                        chrome.bookmarks.get(bookmark.parentId, (results) => {
+                            if (results && results.length > 0) {
+                                const parentFolder = results[0];
+                                // Avoid showing tags for default bookmark folders
+                                if (parentFolder.title !== 'Bookmarks bar' && parentFolder.title !== 'Other bookmarks' && parentFolder.title !== 'Mobile bookmarks' && parentFolder.title !== '') {
+                                    const tag = createTagBadge(parentFolder.title);
+                                    container.appendChild(tag);
+                                }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             });
-        });
+        }
     }
 
     function createTagBadge(tagName) {
