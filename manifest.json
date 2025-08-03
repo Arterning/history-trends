@@ -4,7 +4,8 @@
   "description": "Analyzes browsing history and visualizes trends.",
   "manifest_version": 3,
   "permissions": [
-    "history"
+    "history",
+    "bookmarks"
   ],
   "action": {
     "default_icon": {
