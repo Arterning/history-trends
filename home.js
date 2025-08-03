@@ -349,7 +349,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const domainHeader = document.createElement('div');
         domainHeader.className = 'domain-header';
-        domainHeader.textContent = `${domain} (${pages.length} visits)`;
+        
+        // Create favicon element
+        const favicon = document.createElement('img');
+        favicon.className = 'domain-favicon';
+        favicon.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
+        favicon.alt = `${domain} favicon`;
+        favicon.onerror = function() {
+          // Fallback to a default icon if favicon fails to load
+          this.style.display = 'none';
+        };
+        
+        // Create domain text
+        const domainText = document.createElement('span');
+        domainText.textContent = `${domain} (${pages.length} visits)`;
+        
+        domainHeader.appendChild(favicon);
+        domainHeader.appendChild(domainText);
         
         const pagesUl = document.createElement('ul');
         pagesUl.className = 'page-list';

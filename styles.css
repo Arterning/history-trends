@@ -261,10 +261,21 @@ h1 {
   font-weight: bold;
   color: #333;
   transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .domain-header:hover {
   background-color: #e9ecef;
+}
+
+.domain-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .page-list {
