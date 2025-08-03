@@ -6,6 +6,95 @@
   <title>AI History Trends</title>
   <link rel="stylesheet" href="styles.css">
   <script src="tailwind.js"></script>
+  <style>
+    /* Popup specific styles */
+    body {
+      width: 800px;
+      height: 600px;
+      margin: 0;
+      padding: 10px;
+      overflow: hidden;
+    }
+    
+    .container {
+      max-width: none;
+      margin: 0;
+      padding: 10px;
+      height: 100%;
+      overflow-y: auto;
+    }
+    
+    .navigation {
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    
+    .navigation a {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    
+    h1 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    
+    h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    
+    .controls-container {
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    
+    .sort-container {
+      align-items: center;
+    }
+    
+    .search-container {
+      align-items: center;
+    }
+    
+    .time-range-container {
+      margin-bottom: 10px;
+    }
+    
+    .time-range-container button {
+      padding: 5px 8px;
+      font-size: 11px;
+    }
+    
+    .time-range-container input[type="date"] {
+      padding: 4px 6px;
+      font-size: 11px;
+    }
+    
+    #grouped-search-input {
+      padding: 4px 6px;
+      font-size: 11px;
+    }
+    
+    #grouped-search-button {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+    
+    .domain-header {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+    
+    .page-list li {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    
+    .bookmark-icon {
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -14,15 +103,13 @@
       <a href="history.html">History</a>
       <a href="analysis.html">Analysis</a>
     </nav>
-    <h1>Browsing History</h1>
     
     <div id="content">
-
       <section id="grouped-history-section">
-        <h2 class="text-3xl font-bold">Grouped History by Domain</h2>
+        <!-- <h2 class="text-3xl font-bold">Grouped History by Domain</h2> -->
         <div class="controls-container">
           <div class="sort-container">
-            <label for="sort-order">Sort by:</label>
+            <!-- <label for="sort-order">Sort by:</label> -->
             <select id="sort-order">
               <option value="visits">Visits (Most)</option>
               <option value="time">Time (Newest)</option>
