@@ -379,8 +379,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const fragment = document.createDocumentFragment();
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
   
-      let filteredDomains = Object.keys(groupedHistoryData)
-        .filter(domain => domain.toLowerCase().includes(lowerCaseSearchTerm));
+      // Filter domains and pages by search term
+      let filteredDomains = [];
+      
+      for (const domain of Object.keys(groupedHistoryData)) {
+        const pages = groupedHistoryData[domain];
+        const domainMatches = domain.toLowerCase().includes(lowerCaseSearchTerm);
+        
+        // Check if any page title matches the search term
+        const pageMatches = pages.some(page => {
+          const title = page.title || page.url;
+          return title.toLowerCase().includes(lowerCaseSearchTerm);
+        });
+        
+        if (domainMatches || pageMatches) {
+          filteredDomains.push(domain);
+        }
+      }
       
       // Filter by bookmark folder if needed
       if (currentBookmarkFilter !== 'all') {
@@ -442,6 +457,17 @@ document.addEventListener('DOMContentLoaded', () => {
           link.href = page.url;
           link.textContent = page.title || page.url;
           link.target = '_blank';
+          
+          // Highlight search matches
+          if (searchTerm && searchTerm.trim() !== '') {
+            const title = page.title || page.url;
+            const lowerCaseTitle = title.toLowerCase();
+            const lowerCaseSearchTerm = searchTerm.toLowerCase();
+            
+            if (lowerCaseTitle.includes(lowerCaseSearchTerm)) {
+              link.classList.add('search-highlight');
+            }
+          }
           
           // Get bookmarks for this URL
           const bookmarks = await getBookmarksForUrl(page.url);

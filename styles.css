@@ -372,6 +372,18 @@ h1 {
   text-decoration: underline;
 }
 
+/* Search Highlight Styles */
+.search-highlight {
+  background-color: #fff3cd !important;
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  border: 1px solid #ffeaa7 !important;
+}
+
+.search-highlight:hover {
+  background-color: #ffeaa7 !important;
+}
+
 /* Navigation Styles */
 .navigation {
   display: flex;
