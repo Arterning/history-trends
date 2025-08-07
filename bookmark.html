@@ -121,8 +121,8 @@
 <body>
   <div class="container">
     <nav class="navigation">
-      <a href="home.html" class="active">Home</a>
-      <a href="bookmark.html">Bookmark</a>
+      <a href="home.html">Home</a>
+      <a href="bookmark.html" class="active">Bookmark</a>
       <a href="history.html">History</a>
       <a href="analysis.html">Analysis</a>
     </nav>
@@ -143,20 +143,17 @@
             <button id="grouped-search-button">Search</button>
           </div>
         </div>
-        <div class="time-range-container">
-          <button id="today-btn">Today</button>
-          <button id="week-btn">This Week</button>
-          <button id="month-btn">This Month</button>
-          <button id="year-btn">This Year</button>
-          <input type="date" id="start-date">
-          <input type="date" id="end-date">
-          <button id="custom-range-btn">View</button>
+        
+        <div class="bookmark-filter-container">
+          <label>Filter by Bookmark Folder:</label>
+          <div class="bookmark-filter-buttons">
+            <button id="all-bookmarks-btn" class="bookmark-filter-btn active">All Pages</button>
+            <!-- Bookmark folder buttons will be dynamically added here -->
+          </div>
         </div>
-        
-        
         <ul id="grouped-history-list"></ul>
       </section>
     </div>
-    <script src="home.js"></script>
+    <script src="bookmark.js"></script>
 </body>
 </html>
