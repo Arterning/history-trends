@@ -218,22 +218,61 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    async function fetchHistoryForBookmarkFolder(folderId) {
+      try {
+        // 获取该文件夹下所有书签
+        const response = await chrome.runtime.sendMessage({
+          action: 'getBookmarksInFolder',
+          folderId: folderId
+        });
+    
+        if (!response.success) {
+          console.error('获取书签失败');
+          return;
+        }
+    
+        const bookmarks = response.bookmarks; // [{url, title, id, parentId}, ...]
+        const urls = bookmarks.map(b => b.url);
+    
+        // 获取这些书签的历史记录
+        chrome.history.search({ text: '', startTime: 0, maxResults: 0 }, (historyItems) => {
+          // 只保留 URL 在书签列表里的记录
+          const filteredHistory = historyItems.filter(item => urls.includes(item.url));
+    
+          // 域名分组
+          groupedHistoryData = groupHistoryByDomain(filteredHistory);
+    
+          // 渲染（排序依然用 sortOrder 控制）
+          renderGroupedHistory(groupedSearchInput?.value || '');
+        });
+      } catch (error) {
+        console.error('加载书签文件夹历史失败:', error);
+      }
+    }
+
     function setBookmarkFilter(folderId) {
-      // Update active state
+      // 更新按钮激活状态
       document.querySelectorAll('.bookmark-filter-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-      
-      const activeButton = folderId === 'all' 
-        ? allBookmarksBtn 
+    
+      const activeButton = folderId === 'all'
+        ? allBookmarksBtn
         : bookmarkFilterButtons.querySelector(`[data-folder-id="${folderId}"]`);
-      
+    
       if (activeButton) {
         activeButton.classList.add('active');
       }
-      
+    
       currentBookmarkFilter = folderId;
-      renderGroupedHistory(groupedSearchInput.value);
+    
+      if (folderId === 'all') {
+        // 如果是全部书签，按原逻辑（默认今天的历史）
+        fetchAndGroupHistory(getStartOf('today'));
+      } else {
+        // 如果是具体文件夹，就加载该文件夹所有书签的历史
+        fetchHistoryForBookmarkFolder(folderId);
+      }
     }
 
     async function showBookmarkFolderDialog(url, title, container) {

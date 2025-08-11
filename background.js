@@ -105,6 +105,32 @@ async function removeBookmark(bookmarkId) {
   }
 }
 
+// 递归获取某个文件夹下的所有书签
+async function getBookmarksInFolder(folderId) {
+  const bookmarks = [];
+
+  async function traverseFolder(id) {
+    const children = await chrome.bookmarks.getChildren(id);
+    for (const child of children) {
+      if (child.url) {
+        // 是书签
+        bookmarks.push({
+          id: child.id,
+          parentId: child.parentId,
+          title: child.title,
+          url: child.url
+        });
+      } else {
+        // 是文件夹，递归
+        await traverseFolder(child.id);
+      }
+    }
+  }
+
+  await traverseFolder(folderId);
+  return bookmarks;
+}
+
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'getBookmarks') {
@@ -141,4 +167,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
     return true; // Keep the message channel open for async response
   }
+
+  if (request.action === 'getBookmarksInFolder') {
+    getBookmarksInFolder(request.folderId)
+      .then(bookmarks => {
+        sendResponse({ success: true, bookmarks });
+      })
+      .catch(error => {
+        console.error('获取书签失败:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true; // 保持异步
+  }
+
 });
